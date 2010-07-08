@@ -1,0 +1,10 @@
+<configuration plugin="allmaps">
+	<settings name="commands">
+		<set name="maps">2</set>
+        <set name="nextmap">2</set>
+	</settings>
+    <!-- Do not touch these unless you know exactly what your doing    -->
+	<settings name="settings">
+		<set name="remove">gametype, ass, bel, ch, ctf, dm, dom, ftag, gg, koth, lms, lts, re, sab, sd, war</set>
+    </settings>
+</configuration>
