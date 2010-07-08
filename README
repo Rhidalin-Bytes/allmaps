@@ -1,0 +1,13 @@
+Badrcon.py
+# Description
+Allmaps changes the functionality of nextmap and maps for
+servers using the openwarfare mod functionality of 
+load based map rotations. It adds sub functions to
+!maps in the terms of 
+!maps low, !maps med and !maps high or !maps all to show all available
+
+# Installation
+copy file to /extplugins and xml to /extplugins/conf
+
+# Versioning
+    This is first commit, version 1.0
