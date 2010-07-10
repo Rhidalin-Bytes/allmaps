@@ -64,7 +64,7 @@ class AllmapsPlugin(b3.plugin.Plugin):
                 client.message('There was a problem getting %s' % population[data])
         else:
             try:
-            maps = []
+                maps = []
                 for n in population:
                     self.debug ('population = %s' % population[n])
                     maps = maps + self.getMaps(population[n])
@@ -143,7 +143,7 @@ class AllmapsPlugin(b3.plugin.Plugin):
         if MRLB[:1] == 1:
             rc = self.getMaps('sv_mapRotationCurrent')
             for n in population:
-                if rc in self.getMaps(population[n])
+                if rc in self.getMaps(population[n]):
                     codmaps = population[n]
                     return codmaps
         else:
