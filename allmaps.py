@@ -11,42 +11,43 @@ class AllmapsPlugin(b3.plugin.Plugin):
     _adminPlugin = None
 
     def startup(self):
-      """\
-      Initialize plugin settings
-      """
-      self._adminPlugin = self.console.getPlugin('admin')
-      if not self._adminPlugin:
-        self.error('Could not find admin plugin')
-        return False
+        """\
+        Initialize plugin settings
+        """
+        self._adminPlugin = self.console.getPlugin('admin')
+        if not self._adminPlugin:
+            self.error('Could not find admin plugin')
+            return False
     
-      if 'commands' in self.config.sections():
-        for cmd in self.config.options('commands'):
-          level = self.config.get('commands', cmd)
-          sp = cmd.split('-')
-          alias = None
-          if len(sp) == 2:
-            cmd, alias = sp
+        if 'commands' in self.config.sections():
+            for cmd in self.config.options('commands'):
+                level = self.config.get('commands', cmd)
+                sp = cmd.split('-')
+                alias = None
+                if len(sp) == 2:
+                    cmd, alias = sp
 
-          func = self.getCmd(cmd)
-          if func:
-            self._adminPlugin.registerCommand(self, cmd, level, func, alias)
+                func = self.getCmd(cmd)
+                if func:
+                    self._adminPlugin.registerCommand(self, cmd, level, func, alias)
+
+        population = {'low':'sv_mapRotation_low','med':'sv_mapRotation_medium','high':'sv_mapRotation_high'}
             
-      self.debug('Allmaps Started')
+        self.debug('Allmaps Started')
 
 
     def getCmd(self, cmd):
-      cmd = 'cmd_%s' % cmd
-      if hasattr(self, cmd):
-        func = getattr(self, cmd)
-        return func
+        cmd = 'cmd_%s' % cmd
+        if hasattr(self, cmd):
+            func = getattr(self, cmd)
+            return func
 
-      return None
+        return None
 
     def cmd_maps(self, data, client=None, cmd=None):
         """\
         <rotation> - For current rotation enter nothing or low, med, high or all for others.
         """
-        population = {'low':'sv_mapRotation_low','med':'sv_mapRotation_medium','high':'sv_mapRotation_high'}
 
         if not self._adminPlugin.aquireCmdLock(cmd, client, 60, True):
             client.message('^7Do not spam commands')
@@ -139,8 +140,12 @@ class AllmapsPlugin(b3.plugin.Plugin):
     def rotation(self):
         MRLB = self.console.getCvar('sv_mapRotationLoadBased')
         self.debug('sv_mapRotationLoadBased is %s' % MRLB)
-        if MRLB:
-            codmaps = ('sv_mapRotationCurrent')
+        if MRLB[:1] == 1:
+            rc = self.getMaps('sv_mapRotationCurrent')
+            for n in population:
+                if rc in self.getMaps(population[n])
+                    codmaps = population[n]
+                    return codmaps
         else:
             codmaps = ('sv_mapRotation')
         return codmaps
