@@ -9,7 +9,8 @@ import b3.events
 
 class AllmapsPlugin(b3.plugin.Plugin):
     _adminPlugin = None
-
+    population = {'low':'sv_mapRotation_low','med':'sv_mapRotation_medium','high':'sv_mapRotation_high'}
+    
     def startup(self):
         """\
         Initialize plugin settings
@@ -30,9 +31,7 @@ class AllmapsPlugin(b3.plugin.Plugin):
                 func = self.getCmd(cmd)
                 if func:
                     self._adminPlugin.registerCommand(self, cmd, level, func, alias)
-
-        population = {'low':'sv_mapRotation_low','med':'sv_mapRotation_medium','high':'sv_mapRotation_high'}
-            
+        
         self.debug('Allmaps Started')
 
 
@@ -58,16 +57,16 @@ class AllmapsPlugin(b3.plugin.Plugin):
             data = "current"
         elif not data =='all':
             try:
-                self.debug ('population = %s' % population[data])
-                maps = self.getMaps(population[data])
+                self.debug ('population = %s' % self.population[data])
+                maps = self.getMaps(self.population[data])
             except:
-                client.message('There was a problem getting %s' % population[data])
+                client.message('There was a problem getting %s' % self.population[data])
         else:
             try:
                 maps = []
                 for n in population:
-                    self.debug ('population = %s' % population[n])
-                    maps = maps + self.getMaps(population[n])
+                    self.debug ('population = %s' % self.population[n])
+                    maps = maps + self.getMaps(self.population[n])
             except:
                 client.message('There was a problem getting all maps')
         if maps:
@@ -138,14 +137,23 @@ class AllmapsPlugin(b3.plugin.Plugin):
             return None
             
     def rotation(self):
+        cd = []
+        rc = []
+        i = []
         MRLB = self.console.getCvar('sv_mapRotationLoadBased')
-        self.debug('sv_mapRotationLoadBased is %s' % MRLB)
-        if MRLB[:1] == 1:
+        if MRLB.value is '1':
             rc = self.getMaps('sv_mapRotationCurrent')
-            for n in population:
-                if rc in self.getMaps(population[n]):
-                    codmaps = population[n]
+            for n in self.population:
+                cd = self.getMaps(self.population[n])
+                i = list(set(rc) & set(cd))
+                if i:
+                    codmaps = self.population[n]
                     return codmaps
         else:
             codmaps = ('sv_mapRotation')
-        return codmaps
+            self.debug('skipped loop')
+            return codmaps
+        
+#_mrcs_sv_mapRotationCurrent_low " gametype sd map mp_bridge"
+#_mrcs_sv_mapRotationCurrent_medium " gametype sd map mp_v2 gametype sd map mp_powcamp_n gametype sd map mp_ax_simmerath gametype sd map mp_kneedeep gametype sd map mp_trenchtoast gametype sd map mp_subway"
+#_sl_current "medium"
